@@ -1,0 +1,243 @@
+{
+ "generatedAt": "2026-10-15T11:00:00+01:00",
+ "crs": "CHX",
+ "filtercrs": "ORP",
+ "filterType": "to",
+ "trainServices": [
+  {
+   "serviceID": "chx1",
+   "std": "10:50",
+   "etd": "10:58",
+   "platform": "2",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 10,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Sevenoaks",
+     "crs": "SEV"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Waterloo East",
+       "crs": "WAE",
+       "st": "10:53",
+       "et": "11:01",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "10:57",
+       "et": "11:05",
+       "isCancelled": false
+      },
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:14",
+       "et": "11:22",
+       "isCancelled": false
+      },
+      {
+       "locationName": "Sevenoaks",
+       "crs": "SEV",
+       "st": "11:25",
+       "et": "11:33",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  },
+  {
+   "serviceID": "chx2",
+   "std": "11:08",
+   "etd": "11:15",
+   "platform": "2",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 8,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Tunbridge Wells",
+     "crs": "TBW"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "11:14",
+       "et": "11:21",
+       "isCancelled": false
+      },
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:31",
+       "et": "11:38",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ],
+   "formation": {
+    "coaches": [
+     {
+      "number": "1",
+      "coachClass": "Standard",
+      "loading": 90,
+      "loadingSpecified": true
+     },
+     {
+      "number": "2",
+      "coachClass": "Standard",
+      "loading": 85,
+      "loadingSpecified": true
+     },
+     {
+      "number": "3",
+      "coachClass": "Standard",
+      "loading": 70,
+      "loadingSpecified": true
+     },
+     {
+      "number": "4",
+      "coachClass": "Standard",
+      "loading": 95,
+      "loadingSpecified": true
+     }
+    ]
+   }
+  },
+  {
+   "serviceID": "chx3",
+   "std": "11:07",
+   "etd": "11:10",
+   "platform": "4",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 10,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Orpington",
+     "crs": "ORP"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:46",
+       "et": "11:49",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  },
+  {
+   "serviceID": "chx4",
+   "std": "11:20",
+   "etd": "Cancelled",
+   "platform": "6",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 8,
+   "isCancelled": true,
+   "destination": [
+    {
+     "locationName": "Sevenoaks",
+     "crs": "SEV"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:52",
+       "et": "Cancelled",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ],
+   "cancelReason": "This train has been cancelled because of a shortage of train crew"
+  },
+  {
+   "serviceID": "chx5",
+   "std": "11:37",
+   "etd": "On time",
+   "platform": "4",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 12,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Hastings",
+     "crs": "HGS"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "12:03",
+       "et": "On time",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ],
+   "formation": {
+    "coaches": [
+     {
+      "number": "1",
+      "coachClass": "Standard",
+      "loading": 10,
+      "loadingSpecified": true
+     },
+     {
+      "number": "2",
+      "coachClass": "Standard",
+      "loading": 20,
+      "loadingSpecified": true
+     },
+     {
+      "number": "3",
+      "coachClass": "Standard",
+      "loading": 15,
+      "loadingSpecified": true
+     },
+     {
+      "number": "4",
+      "coachClass": "Standard",
+      "loading": 25,
+      "loadingSpecified": true
+     }
+    ]
+   }
+  }
+ ]
+}

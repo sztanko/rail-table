@@ -1,0 +1,24 @@
+[project]
+name = "rail-table"
+version = "0.1.0"
+description = "Next trains to and from Orpington, from the nearest relevant station"
+requires-python = ">=3.12"
+license = "MIT"
+dependencies = [
+    "fastapi>=0.115",
+    "httpx>=0.27",
+    "uvicorn>=0.30",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-asyncio>=0.24"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["rail_table"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"

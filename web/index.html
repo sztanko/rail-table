@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#161a3d">
+  <title>Rail Table</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <button id="station-btn" class="route" aria-haspopup="dialog">
+      <span id="route">Finding you…</span>
+      <span id="mode" class="mode"></span>
+    </button>
+    <button id="refresh" class="icon-btn" aria-label="Refresh">&#x21bb;</button>
+  </header>
+
+  <main>
+    <p id="notice" class="notice" hidden></p>
+    <ul id="messages" class="messages" hidden></ul>
+    <ol id="services" class="services"></ol>
+  </main>
+
+  <footer id="updated"></footer>
+
+  <dialog id="picker">
+    <form method="dialog">
+      <h2>Show departures from</h2>
+      <div id="picker-options"></div>
+      <button value="cancel" class="close">Close</button>
+    </form>
+  </dialog>
+</body>
+</html>

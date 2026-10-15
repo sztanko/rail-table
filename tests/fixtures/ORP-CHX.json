@@ -1,0 +1,117 @@
+{
+ "generatedAt": "2026-10-15T11:00:00+01:00",
+ "crs": "ORP",
+ "filtercrs": "CHX",
+ "filterType": "to",
+ "trainServices": [
+  {
+   "serviceID": "orp1",
+   "std": "10:58",
+   "etd": "11:06",
+   "platform": "2",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 10,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "London Charing Cross",
+     "crs": "CHX"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "11:15",
+       "et": "11:23",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Waterloo East",
+       "crs": "WAE",
+       "st": "11:19",
+       "et": "11:27",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Charing Cross",
+       "crs": "CHX",
+       "st": "11:22",
+       "et": "11:30",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  },
+  {
+   "serviceID": "orp3",
+   "std": "11:15",
+   "etd": "On time",
+   "platform": "2",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 8,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "London Charing Cross",
+     "crs": "CHX"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "11:32",
+       "et": "On time",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Charing Cross",
+       "crs": "CHX",
+       "st": "11:40",
+       "et": "On time",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ],
+   "formation": {
+    "coaches": [
+     {
+      "number": "1",
+      "coachClass": "Standard",
+      "loading": 90,
+      "loadingSpecified": true
+     },
+     {
+      "number": "2",
+      "coachClass": "Standard",
+      "loading": 85,
+      "loadingSpecified": true
+     },
+     {
+      "number": "3",
+      "coachClass": "Standard",
+      "loading": 70,
+      "loadingSpecified": true
+     },
+     {
+      "number": "4",
+      "coachClass": "Standard",
+      "loading": 95,
+      "loadingSpecified": true
+     }
+    ]
+   }
+  }
+ ]
+}

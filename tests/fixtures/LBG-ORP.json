@@ -1,0 +1,75 @@
+{
+ "generatedAt": "2026-10-15T11:00:00+01:00",
+ "crs": "LBG",
+ "filtercrs": "ORP",
+ "filterType": "to",
+ "trainServices": [
+  {
+   "serviceID": "chx1",
+   "std": "10:57",
+   "etd": "11:05",
+   "platform": "6",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 10,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Sevenoaks",
+     "crs": "SEV"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:14",
+       "et": "11:22",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  },
+  {
+   "serviceID": "cst1",
+   "std": "11:02",
+   "etd": "On time",
+   "platform": "3",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 6,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "Orpington",
+     "crs": "ORP"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "Hither Green",
+       "crs": "HGR",
+       "st": "11:09",
+       "et": "On time",
+       "isCancelled": false
+      },
+      {
+       "locationName": "Orpington",
+       "crs": "ORP",
+       "st": "11:26",
+       "et": "On time",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  }
+ ]
+}

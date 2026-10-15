@@ -1,0 +1,15 @@
+# systemd *user* unit — install with deploy/install-service.sh
+[Unit]
+Description=rail-table (rail.geocube.work) — next trains to/from Orpington
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/workspace/rail-table
+EnvironmentFile=-%h/workspace/rail-table/.env
+ExecStart=%h/workspace/rail-table/.venv/bin/uvicorn rail_table.app:app --host 127.0.0.1 --port 8787 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=on-failure
+RestartSec=5
+MemoryMax=256M
+
+[Install]
+WantedBy=default.target

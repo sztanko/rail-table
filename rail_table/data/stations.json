@@ -1,0 +1,205 @@
+[
+ {
+  "crs": "CHX",
+  "name": "London Charing Cross",
+  "lat": 51.5075,
+  "lon": -0.12369,
+  "role": "london"
+ },
+ {
+  "crs": "WAE",
+  "name": "London Waterloo East",
+  "lat": 51.50451,
+  "lon": -0.10814,
+  "role": "london"
+ },
+ {
+  "crs": "LBG",
+  "name": "London Bridge",
+  "lat": 51.50503,
+  "lon": -0.08506,
+  "role": "london"
+ },
+ {
+  "crs": "ORP",
+  "name": "Orpington",
+  "lat": 51.37346,
+  "lon": 0.08905,
+  "role": "orpington"
+ },
+ {
+  "crs": "CLD",
+  "name": "Chelsfield",
+  "lat": 51.35661,
+  "lon": 0.10833,
+  "role": "south"
+ },
+ {
+  "crs": "KCK",
+  "name": "Knockholt",
+  "lat": 51.34573,
+  "lon": 0.13087,
+  "role": "south"
+ },
+ {
+  "crs": "DNG",
+  "name": "Dunton Green",
+  "lat": 51.29642,
+  "lon": 0.17162,
+  "role": "south"
+ },
+ {
+  "crs": "SEV",
+  "name": "Sevenoaks",
+  "lat": 51.27641,
+  "lon": 0.18194,
+  "role": "south"
+ },
+ {
+  "crs": "HLB",
+  "name": "Hildenborough",
+  "lat": 51.21458,
+  "lon": 0.22788,
+  "role": "south"
+ },
+ {
+  "crs": "TON",
+  "name": "Tonbridge",
+  "lat": 51.19113,
+  "lon": 0.26971,
+  "role": "south"
+ },
+ {
+  "crs": "HIB",
+  "name": "High Brooms",
+  "lat": 51.14961,
+  "lon": 0.27769,
+  "role": "south"
+ },
+ {
+  "crs": "TBW",
+  "name": "Tunbridge Wells",
+  "lat": 51.13012,
+  "lon": 0.26243,
+  "role": "south"
+ },
+ {
+  "crs": "FRT",
+  "name": "Frant",
+  "lat": 51.10432,
+  "lon": 0.29403,
+  "role": "south"
+ },
+ {
+  "crs": "WAD",
+  "name": "Wadhurst",
+  "lat": 51.07338,
+  "lon": 0.31248,
+  "role": "south"
+ },
+ {
+  "crs": "SOG",
+  "name": "Stonegate",
+  "lat": 51.02018,
+  "lon": 0.36402,
+  "role": "south"
+ },
+ {
+  "crs": "ETC",
+  "name": "Etchingham",
+  "lat": 51.01048,
+  "lon": 0.44194,
+  "role": "south"
+ },
+ {
+  "crs": "RBR",
+  "name": "Robertsbridge",
+  "lat": 50.98555,
+  "lon": 0.46868,
+  "role": "south"
+ },
+ {
+  "crs": "BAT",
+  "name": "Battle",
+  "lat": 50.91312,
+  "lon": 0.49517,
+  "role": "south"
+ },
+ {
+  "crs": "CWU",
+  "name": "Crowhurst",
+  "lat": 50.8887,
+  "lon": 0.50098,
+  "role": "south"
+ },
+ {
+  "crs": "WLD",
+  "name": "West St Leonards",
+  "lat": 50.85321,
+  "lon": 0.53996,
+  "role": "south"
+ },
+ {
+  "crs": "SLQ",
+  "name": "St Leonards Warrior Square",
+  "lat": 50.85594,
+  "lon": 0.56033,
+  "role": "south"
+ },
+ {
+  "crs": "HGS",
+  "name": "Hastings",
+  "lat": 50.8583,
+  "lon": 0.57683,
+  "role": "south"
+ },
+ {
+  "crs": "ORE",
+  "name": "Ore",
+  "lat": 50.86686,
+  "lon": 0.59163,
+  "role": "south"
+ },
+ {
+  "crs": "PDW",
+  "name": "Paddock Wood",
+  "lat": 51.18245,
+  "lon": 0.38949,
+  "role": "south"
+ },
+ {
+  "crs": "MRN",
+  "name": "Marden",
+  "lat": 51.17544,
+  "lon": 0.49299,
+  "role": "south"
+ },
+ {
+  "crs": "SPU",
+  "name": "Staplehurst",
+  "lat": 51.17186,
+  "lon": 0.55061,
+  "role": "south"
+ },
+ {
+  "crs": "HCN",
+  "name": "Headcorn",
+  "lat": 51.16566,
+  "lon": 0.62751,
+  "role": "south"
+ },
+ {
+  "crs": "PLC",
+  "name": "Pluckley",
+  "lat": 51.15649,
+  "lon": 0.74658,
+  "role": "south"
+ },
+ {
+  "crs": "AFK",
+  "name": "Ashford International",
+  "lat": 51.14335,
+  "lon": 0.87517,
+  "role": "south"
+ }
+]

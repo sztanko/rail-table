@@ -1,0 +1,122 @@
+{
+ "generatedAt": "2026-10-15T11:00:00+01:00",
+ "crs": "ORP",
+ "filtercrs": "LBG",
+ "filterType": "to",
+ "trainServices": [
+  {
+   "serviceID": "orp1",
+   "std": "10:58",
+   "etd": "11:06",
+   "platform": "2",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 10,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "London Charing Cross",
+     "crs": "CHX"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "11:15",
+       "et": "11:23",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Waterloo East",
+       "crs": "WAE",
+       "st": "11:19",
+       "et": "11:27",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Charing Cross",
+       "crs": "CHX",
+       "st": "11:22",
+       "et": "11:30",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ]
+  },
+  {
+   "serviceID": "orp2",
+   "std": "11:04",
+   "etd": "On time",
+   "platform": "1",
+   "operator": "Southeastern",
+   "operatorCode": "SE",
+   "length": 8,
+   "isCancelled": false,
+   "destination": [
+    {
+     "locationName": "London Cannon Street",
+     "crs": "CST"
+    }
+   ],
+   "subsequentCallingPoints": [
+    {
+     "callingPoint": [
+      {
+       "locationName": "London Bridge",
+       "crs": "LBG",
+       "st": "11:30",
+       "et": "On time",
+       "isCancelled": false
+      },
+      {
+       "locationName": "London Cannon Street",
+       "crs": "CST",
+       "st": "11:34",
+       "et": "On time",
+       "isCancelled": false
+      }
+     ],
+     "serviceType": "train"
+    }
+   ],
+   "formation": {
+    "coaches": [
+     {
+      "number": "1",
+      "coachClass": "Standard",
+      "loading": 10,
+      "loadingSpecified": true
+     },
+     {
+      "number": "2",
+      "coachClass": "Standard",
+      "loading": 20,
+      "loadingSpecified": true
+     },
+     {
+      "number": "3",
+      "coachClass": "Standard",
+      "loading": 15,
+      "loadingSpecified": true
+     },
+     {
+      "number": "4",
+      "coachClass": "Standard",
+      "loading": 25,
+      "loadingSpecified": true
+     }
+    ]
+   }
+  }
+ ],
+ "nrccMessages": [
+  {
+   "Value": "Disruption between <a href=\"x\">Sevenoaks</a> &amp; Tonbridge."
+  }
+ ]
+}
