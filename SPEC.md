@@ -1,4 +1,4 @@
-# rail-table — spec
+# Train Departure Board (rail-table) — spec
 
 A one-page web app that, opened on a phone, immediately shows the next trains
 that matter for getting to or from **Orpington**, from whichever relevant

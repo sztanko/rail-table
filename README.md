@@ -1,6 +1,6 @@
-# rail-table
+# Train Departure Board
 
-Next trains to and from **Orpington**, from whichever station you're nearest:
+(repo: `rail-table`) Next trains to and from **Orpington**, from whichever station you're nearest:
 Charing Cross, Waterloo East, London Bridge, Orpington itself (→ London
 Bridge / Charing Cross), or a station further south with trains calling at
 Orpington. Delays, platforms, coaches, how full (where published) and arrival

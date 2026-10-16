@@ -113,7 +113,7 @@ function render(board) {
   const messages = $("messages");
 
   if (board.status === "outside_uk") {
-    $("route").textContent = "Rail Table";
+    $("route").textContent = "Train Departure Board";
     $("mode").textContent = "";
     list.innerHTML = "";
     messages.hidden = true;

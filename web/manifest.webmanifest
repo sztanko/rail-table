@@ -1,6 +1,6 @@
 {
-  "name": "Rail Table",
-  "short_name": "Rail Table",
+  "name": "Train Departure Board",
+  "short_name": "Departures",
   "description": "Next trains to and from Orpington",
   "start_url": "./",
   "scope": "./",
