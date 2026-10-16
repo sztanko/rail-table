@@ -1,6 +1,7 @@
-// App shell: served from cache instantly, refreshed in the background.
-// The API is never cached here — the page keeps its own last board.
-const CACHE = "rail-table-v3";
+// App shell: network first so updates show up immediately; the cached copy is
+// only a fallback for when the phone is offline. The API is never cached here
+// — the page keeps its own last board.
+const CACHE = "rail-table-v4";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg", "icon-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -19,13 +20,11 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin || url.pathname.includes("/api/")) return;
   e.respondWith(
-    caches.open(CACHE).then(async (cache) => {
-      const cached = await cache.match(e.request);
-      const network = fetch(e.request).then((resp) => {
-        if (resp.ok) cache.put(e.request, resp.clone());
+    fetch(e.request)
+      .then((resp) => {
+        if (resp.ok) caches.open(CACHE).then((c) => c.put(e.request, resp.clone()));
         return resp;
-      });
-      return cached || network;
-    }),
+      })
+      .catch(() => caches.match(e.request)),
   );
 });
