@@ -21,7 +21,9 @@ html, body {
 }
 
 body {
-  min-height: 100dvh;
+  /* Fixed-height column: header and footer stay put, only the list scrolls. */
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
@@ -61,7 +63,7 @@ header {
 .icon-btn.spin { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-main { flex: 1; margin: 0 6px; background: var(--row); }
+main { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; margin: 0 6px; background: var(--row); }
 
 .notice { margin: 0; padding: 24px 16px; text-align: center; color: var(--muted); }
 .notice.big { font-size: 1.3rem; color: var(--text); padding: 48px 16px; }
@@ -161,7 +163,7 @@ main { flex: 1; margin: 0 6px; background: var(--row); }
 .reason { color: var(--bad); font-size: 0.78rem; }
 .reason.delay { color: var(--late); }
 
-footer { padding: 6px 0 10px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+footer { flex: none; padding: 6px 0 10px; text-align: center; color: var(--muted); font-size: 0.85rem; }
 footer { font-variant-numeric: tabular-nums; }
 footer.stale { color: var(--late); }
 
