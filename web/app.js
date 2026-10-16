@@ -189,9 +189,11 @@ function minutesUntil(hhmm) {
 }
 
 function loadingBadge(l) {
-  if (l.level) {
-    const text = { high: "Busy", medium: "Fairly busy", low: "Quiet" }[l.level];
-    return `<span class="load ${l.level}" title="${l.pct}% full">${text}</span>`;
+  if (l.pct != null) {
+    // A tiny gauge: fill = how full, hue slides green (empty) -> yellow -> red (full).
+    const pct = Math.max(0, Math.min(100, l.pct));
+    const hue = Math.round(120 * (1 - pct / 100));
+    return `<span class="gauge" title="${pct}% full" aria-label="${pct}% full"><span style="width:${Math.max(pct, 8)}%;background:hsl(${hue} 75% 50%)"></span></span>`;
   }
   const bg = /^#?[0-9a-f]{3,8}$/i.test(l.colour || "") ? `background:#${l.colour.replace("#", "")}` : "background:var(--rule)";
   return `<span class="load" style="${bg}">${esc(l.label)}</span>`;

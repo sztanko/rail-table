@@ -8,9 +8,6 @@
   --late: #ff9a3c;
   --bad: #ff5d6c;
   --ok: #7fd49b;
-  --busy: #c0283b;
-  --some: #b0731a;
-  --quiet: #2c7a4b;
   --fast: #4fc3f7;
 }
 
@@ -140,9 +137,15 @@ main { flex: 1; margin: 0 6px; background: var(--row); }
   font-size: 0.78rem;
   font-style: normal;
 }
-.load.high { background: var(--busy); }
-.load.medium { background: var(--some); }
-.load.low { background: var(--quiet); }
+.gauge {
+  display: inline-block;
+  width: 18px; height: 6px;
+  border-radius: 3px;
+  background: rgb(255 255 255 / 0.15);
+  overflow: hidden;
+  vertical-align: middle;
+}
+.gauge > span { display: block; height: 100%; border-radius: 3px; }
 
 .trip { display: flex; align-items: flex-end; flex: 0 1 auto; min-width: 0; color: var(--muted); }
 /* Arrows sit at the height of the bridge deck (4.5px up on an 18px icon). */
