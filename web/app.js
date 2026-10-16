@@ -142,10 +142,14 @@ function row(s) {
   const trip = s.status === "cancelled" ? "" : tripLine(s.arrivals);
 
   const reason = s.cancelReason || (s.status !== "on_time" && s.delayReason);
-  const cls = ["svc", s.fast && "fast", minutesUntil(s.expected || s.std) < SOON_MIN && "soon"].filter(Boolean).join(" ");
+  const leavesIn = minutesUntil(s.expected || s.std);
+  const soon = leavesIn < SOON_MIN;
+  const countdown = soon && s.status !== "cancelled"
+    ? `<span class="leaves-in">${leavesIn <= 0 ? "due" : `in ${leavesIn} min`}</span>` : "";
+  const cls = ["svc", s.fast && "fast", soon && "soon"].filter(Boolean).join(" ");
   return `<li class="${cls}">
     <div class="line">
-      <div class="dest"><span class="name">${esc(short(s.destination))}</span>${s.platform ? `<span class="plat">${esc(s.platform)}</span>` : ""}</div>
+      <div class="dest"><span class="name">${esc(short(s.destination))}</span>${s.platform ? `<span class="plat">${esc(s.platform)}</span>` : ""}${countdown}</div>
       ${dep}
     </div>
     <div class="line">
