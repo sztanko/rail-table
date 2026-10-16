@@ -72,11 +72,11 @@ async def test_nearest_station_towards_orpington(darwin, lat, lon, crs):
 async def test_charing_cross_board(darwin):
     board = await build_board(darwin, 51.508, -0.128, now=NOW)
     first, second, third, fourth, fifth = board["services"]
-    # Ordered by scheduled departure.
-    assert [s["std"] for s in board["services"]] == ["10:50", "11:07", "11:08", "11:20", "11:37"]
+    # Ordered by Orpington arrival: chx3 leaves before chx2 but gets there later.
+    assert [s["id"] for s in board["services"]] == ["chx1", "chx2", "chx3", "chx4", "chx5"]
     assert first["delayMin"] == 8 and first["expected"] == "10:58" and first["coaches"] == 10
     assert first["arrivals"][0]["expected"] == "11:22"
-    assert third["loading"] == {"level": "high", "pct": 85}
+    assert second["loading"] == {"level": "high", "pct": 85}
     assert fourth["status"] == "cancelled" and "train crew" in fourth["cancelReason"]
     assert fifth["loading"]["level"] == "low"
 
@@ -139,8 +139,8 @@ def test_index_versions_assets(monkeypatch):
         assert client.get("/api/board", params={"station": "ORP"}).headers["cache-control"] == "no-store"
 
 
-async def test_ordered_by_expected_departure(darwin):
-    # chx3 is timetabled 11:07 but expected 11:10; chx1 10:50 expected 10:58.
-    board = await build_board(darwin, station="CHX", now=NOW)
-    order = [(s["id"], s["expected"]) for s in board["services"]]
-    assert order[:3] == [("chx1", "10:58"), ("chx3", "11:10"), ("chx2", "11:15")]
+async def test_ordered_by_arrival(darwin):
+    # From Orpington: orp2 (Cannon Street) reaches LBG 11:30, orp1 reaches CHX
+    # 11:30 too; the tie goes to orp2, which leaves first (11:04 vs 11:06).
+    board = await build_board(darwin, station="ORP", now=NOW)
+    assert [s["id"] for s in board["services"]] == ["orp2", "orp1", "orp3"]

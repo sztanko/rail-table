@@ -82,12 +82,18 @@ def _merge_services(boards: list[dict], targets: tuple[str, ...], now: datetime)
                 seen[sid] = parsed
     now_min = now.hour * 60 + now.minute
 
-    # Order by when the train will actually leave, not its timetable slot.
-    def leaves(s: dict) -> int:
-        when = s["expected"] if s["status"] in ("on_time", "late") else s["std"]
-        return (_minutes(when) - now_min + 720) % 1440
+    def rel(hhmm: str | None) -> int:
+        return (_minutes(hhmm) - now_min + 720) % 1440
 
-    return sorted(seen.values(), key=leaves)
+    # Order by when the train actually gets you there: expected arrival at the
+    # last target it reaches (Charing Cross, else London Bridge for Cannon
+    # Street trains; Orpington the other way). Ties go to the earlier leaver.
+    def key(s: dict) -> tuple[int, int]:
+        last = s["arrivals"][-1]
+        leaves = s["expected"] if s["status"] in ("on_time", "late") else s["std"]
+        return rel(last["expected"] or last["st"]), rel(leaves)
+
+    return sorted(seen.values(), key=key)
 
 
 def _service(svc: dict, targets: tuple[str, ...], board_crs: str | None) -> dict | None:
