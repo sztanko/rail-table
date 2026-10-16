@@ -31,7 +31,7 @@ class Darwin:
         self._fixtures = fixtures_dir
         self._cache: dict[tuple[str, str], tuple[float, dict]] = {}
         self._locks: dict[tuple[str, str], asyncio.Lock] = {}
-        self._http = httpx.AsyncClient(timeout=10)
+        self._http = httpx.AsyncClient(timeout=httpx.Timeout(6, connect=4))
 
     async def aclose(self) -> None:
         await self._http.aclose()
@@ -54,18 +54,23 @@ class Darwin:
             return json.loads(path.read_text()) if path.exists() else {"trainServices": []}
         if not self._api_key:
             raise DarwinError("No Rail Data Marketplace API key configured")
-        try:
-            resp = await self._http.get(
-                f"{self._base}/GetDepBoardWithDetails/{crs}",
-                params={
-                    "numRows": NUM_ROWS,
-                    "filterCrs": calling_at,
-                    "filterType": "to",
-                    "timeWindow": TIME_WINDOW_MINUTES,
-                },
-                headers={"x-apikey": self._api_key},
-            )
-            resp.raise_for_status()
-        except httpx.HTTPError as e:
-            raise DarwinError(f"Darwin request failed: {e}") from e
-        return resp.json()
+        # One retry: the gateway occasionally stalls on a cold connection.
+        for attempt in range(2):
+            try:
+                resp = await self._http.get(
+                    f"{self._base}/GetDepBoardWithDetails/{crs}",
+                    params={
+                        "numRows": NUM_ROWS,
+                        "filterCrs": calling_at,
+                        "filterType": "to",
+                        "timeWindow": TIME_WINDOW_MINUTES,
+                    },
+                    headers={"x-apikey": self._api_key},
+                )
+                resp.raise_for_status()
+                return resp.json()
+            except httpx.TransportError as e:
+                if attempt:
+                    raise DarwinError(f"Darwin request failed: {type(e).__name__}") from e
+            except httpx.HTTPError as e:
+                raise DarwinError(f"Darwin request failed: {e}") from e

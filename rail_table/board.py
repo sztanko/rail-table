@@ -13,6 +13,8 @@ from .stations import LONDON_TARGETS, ORPINGTON, Station, all_stations, by_dista
 LONDON_TZ = ZoneInfo("Europe/London")
 # How many southern stations to try (nearest first) before giving up on them.
 MAX_SOUTHERN_TRIES = 4
+# Every NRCC message ends with this; it only costs screen space.
+BOILERPLATE = re.compile(r"\s*(Latest|More) (travel )?information can be found[^.]*\.?", re.I)
 
 
 async def build_board(
@@ -172,7 +174,8 @@ def _messages(boards: list[dict]) -> list[str]:
     out = []
     for board in boards:
         for msg in board.get("nrccMessages") or []:
-            text = html.unescape(re.sub(r"<[^>]+>", "", msg.get("Value") or "")).strip()
+            text = html.unescape(re.sub(r"<[^>]+>", "", msg.get("Value") or ""))
+            text = BOILERPLATE.sub("", text).strip()
             if text and text not in out:
                 out.append(text)
     return out
