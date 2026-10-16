@@ -139,6 +139,8 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 .reason.delay { color: var(--late); }
 
 footer { padding: 8px 0 12px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+footer { font-variant-numeric: tabular-nums; }
+footer.stale { color: var(--late); }
 
 dialog {
   width: min(92vw, 420px);

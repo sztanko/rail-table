@@ -1,8 +1,8 @@
 // App shell: network first so updates show up immediately; the cached copy is
 // only a fallback for when the phone is offline. The API is never cached here
 // — the page keeps its own last board.
-const CACHE = "rail-table-v4";
-const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg", "icon-192.png"];
+const CACHE = "rail-table-v5";
+const SHELL = ["./", "manifest.webmanifest", "icon.svg", "icon-192.png"];
 
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

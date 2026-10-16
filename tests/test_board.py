@@ -125,3 +125,14 @@ async def test_durations(darwin):
     assert [(a["crs"], a["durationMin"]) for a in orp["orp1"]["arrivals"]] == [("LBG", 17), ("CHX", 24)]
     chx = {s["id"]: s for s in (await build_board(darwin, station="CHX", now=NOW))["services"]}
     assert chx["chx4"]["arrivals"][0]["durationMin"] is None  # cancelled
+
+
+def test_index_versions_assets(monkeypatch):
+    monkeypatch.setenv("RAIL_FIXTURES_DIR", str(FIXTURES))
+    from rail_table.app import app
+
+    with TestClient(app) as client:
+        resp = client.get("/")
+        assert "{{v}}" not in resp.text and "app.js?v=" in resp.text
+        assert client.get("/app.js").headers["cache-control"] == "no-cache"
+        assert client.get("/api/board", params={"station": "ORP"}).headers["cache-control"] == "no-store"

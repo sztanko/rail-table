@@ -1,11 +1,12 @@
 """HTTP app: the JSON API plus the static one-page frontend."""
 
+import hashlib
 import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from .board import build_board
@@ -28,6 +29,28 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="rail-table", lifespan=lifespan, docs_url=None, redoc_url=None)
+
+
+@app.middleware("http")
+async def revalidate_static(request, call_next):
+    # Cloudflare would otherwise keep app.js/style.css for hours after a deploy.
+    response = await call_next(request)
+    response.headers.setdefault("Cache-Control", "no-cache")
+    return response
+
+
+def _asset_version() -> str:
+    digest = hashlib.sha256()
+    for name in ("app.js", "style.css"):
+        digest.update((WEB_DIR / name).read_bytes())
+    return digest.hexdigest()[:10]
+
+
+@app.get("/", response_class=HTMLResponse)
+@app.get("/index.html", response_class=HTMLResponse)
+async def index():
+    # Versioned asset URLs, so a deploy can never pair new HTML with stale JS.
+    return (WEB_DIR / "index.html").read_text().replace("{{v}}", _asset_version())
 
 
 @app.get("/api/board")

@@ -200,11 +200,25 @@ function trainIcon() {
   return `<svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor" aria-label="coaches" style="vertical-align:-2px"><path d="M2.5 0h8A2.5 2.5 0 0 1 13 2.5v8a2.5 2.5 0 0 1-2 2.45L12.5 15h-2l-1.5-2H4l-1.5 2h-2L2 12.95A2.5 2.5 0 0 1 0 10.5v-8A2.5 2.5 0 0 1 2.5 0zM2 3v3.5h9V3zm1.5 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm6 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>`;
 }
 
+let fetchedAt = null;
+
 function footer(board) {
-  const t = new Date(board.fetchedAt || Date.now());
-  const hhmm = t.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
-  const stale = Date.now() - t > 2 * REFRESH_MS;
-  $("updated").textContent = `${stale ? "Last updated" : "Updated"} ${hhmm}`;
+  fetchedAt = board.fetchedAt || Date.now();
+  tickFooter();
+}
+
+function ago(ms) {
+  const s = Math.max(0, Math.round(ms / 1000));
+  if (s < 60) return `${s}s ago`;
+  const m = Math.floor(s / 60);
+  return m < 60 ? `${m}m ${s % 60}s ago` : `${Math.floor(m / 60)}h ${m % 60}m ago`;
+}
+
+function tickFooter() {
+  if (!fetchedAt) return;
+  const hhmmss = new Date(fetchedAt).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  $("updated").textContent = `Updated ${hhmmss} · ${ago(Date.now() - fetchedAt)}`;
+  $("updated").classList.toggle("stale", Date.now() - fetchedAt > 2 * REFRESH_MS);
 }
 
 // ---- station picker ---------------------------------------------------
@@ -241,6 +255,7 @@ $("refresh").addEventListener("click", refresh);
 $("messages").addEventListener("click", () => $("messages").classList.toggle("open"));
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 setInterval(() => { if (!document.hidden) load(); }, REFRESH_MS);
+setInterval(tickFooter, 1000);
 // Re-fade rows as their departure gets close, between refreshes.
 setInterval(() => { const b = store.get("board"); if (b && !document.hidden) render(b); }, 20_000);
 
