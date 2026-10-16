@@ -148,15 +148,15 @@ main { flex: 1; margin: 0 6px; background: var(--row); }
 .gauge > span { display: block; height: 100%; border-radius: 3px; }
 
 .trip { display: flex; align-items: flex-end; flex: 0 1 auto; min-width: 0; color: var(--muted); }
-/* Arrows sit at the height of the bridge deck (4.5px up on an 18px icon). */
-.leg { display: flex; flex-direction: column; align-items: center; width: 76px; min-width: 40px; flex-shrink: 1; margin: 0 5px; padding-bottom: 1px; }
+/* Arrows sit at the height of the bridge deck (~3px up on a 12.6px icon). */
+.leg { display: flex; flex-direction: column; align-items: center; width: 76px; min-width: 40px; flex-shrink: 1; margin: 0 5px; margin-bottom: -1px; }
 .leg .mins { font-size: 0.7rem; line-height: 1; margin-bottom: 2px; color: var(--text); opacity: 0.8; font-variant-numeric: tabular-nums; }
 .leg .arrow { width: 100%; height: 8px; opacity: 0.7; }
 .stop { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 34px; }
 .stop .t { font-size: 0.75rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .stop.late .t { color: var(--late); }
 .stop.bad .t { color: var(--bad); }
-.st-icon { display: block; height: 18px; width: auto; }
+.st-icon { display: block; height: 12.6px; width: auto; }
 
 .reason { color: var(--bad); font-size: 0.78rem; }
 .reason.delay { color: var(--late); }
