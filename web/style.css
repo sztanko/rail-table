@@ -77,21 +77,21 @@ main { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; m
 .messages { cursor: pointer; }
 .messages:not(.open) li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-/* Headline: the next fast trains. Slightly larger than station names. */
+/* Headline: the next fast trains. Slightly larger than station names; set
+   apart only by a faint blue tint and the fast-train accent stripe. */
 .fast-banner {
   margin: 8px 8px 2px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #1f8fd6, var(--fast));
-  color: #08131f;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border-left: 3px solid var(--fast);
+  background: rgb(79 195 247 / 0.1);
+  color: var(--text);
   font-size: 1.2rem;
-  font-weight: 500;
   font-variant-numeric: tabular-nums;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
 }
-.fast-banner b { font-weight: 700; white-space: nowrap; }
-.fast-banner .bolt { margin-right: 2px; }
-.fast-banner.none { background: var(--panel); color: var(--muted); font-size: 1rem; box-shadow: none; }
+.fast-banner b { font-weight: 600; color: var(--fast); white-space: nowrap; }
+.fast-banner .bolt { color: var(--fast); }
+.fast-banner.none { border-left-color: var(--rule); background: none; color: var(--muted); font-size: 1rem; }
 .services { list-style: none; margin: 0; padding: 0 14px; }
 
 .svc {
