@@ -177,7 +177,7 @@ function tripLine(arrivals) {
   return `<div class="trip">${parts.join("")}</div>`;
 }
 
-const ARROW = `<svg class="arrow" viewBox="0 0 34 8" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4h31M28.5 1.2 32 4l-3.5 2.8"/></svg>`;
+const ARROW = `<svg class="arrow" viewBox="0 0 68 8" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4h65M62.5 1.2 66 4l-3.5 2.8"/></svg>`;
 
 // Minutes from now until HH:MM (London time), negative if just gone.
 function minutesUntil(hhmm) {
@@ -200,11 +200,11 @@ function loadingBadge(l) {
 // Arrival icons: London Bridge = the bridge and the Shard, Charing Cross = Big Ben and the
 // London Eye, Orpington = home. Drawn in currentColor so they follow the text.
 const STATION_ICONS = {
-  LBG: `<svg class="st-icon" viewBox="0 0 29 18" width="29" height="18" fill="none" stroke="currentColor" stroke-linecap="round" role="img" aria-label="London Bridge"><title>London Bridge</title>
+  LBG: `<svg class="st-icon" viewBox="0 0 28 18" width="28" height="18" fill="none" stroke="currentColor" stroke-linecap="round" role="img" aria-label="London Bridge"><title>London Bridge</title>
     <path d="M1 13.5h19M4 13.5v3.5M17 13.5v3.5" stroke-width="1.4"/>
     <path d="M2.5 13.5Q10.5 1.5 18.5 13.5" stroke-width="1.4"/>
     <path d="M6 9.4v4.1M8.25 8v5.5M10.5 7.5v6M12.75 8v5.5M15 9.4v4.1" stroke-width=".8"/>
-    <path fill="currentColor" stroke="none" d="M22 18 24.1 1.6l.5 1.5L25.3 0 28 18z"/></svg>`,
+    <path fill="currentColor" stroke="none" d="M21.2 18 23.3 1.6l.5 1.5L24.5 0 27.2 18z"/></svg>`,
   CHX: `<svg class="st-icon" viewBox="0 0 21 18" width="21" height="18" role="img" aria-label="Charing Cross"><title>Charing Cross</title>
     <path fill="currentColor" fill-rule="evenodd" d="M2.2 18v-7.5H1.2V6h.6L4 0l2.2 6h.6v4.5H5.8V18zM4 6.7a1.55 1.55 0 1 0 0 3.1a1.55 1.55 0 1 0 0-3.1z"/>
     <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
