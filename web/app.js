@@ -6,6 +6,8 @@ const COORDS_MAX_AGE_MS = 15 * 60_000;
 const MOVED_KM = 0.3;
 // Trains leaving sooner than this are shown faded: too soon to catch.
 const SOON_MIN = 15;
+// Trains leaving sooner than this get an "in N min" badge.
+const COUNTDOWN_MIN = 45;
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -144,7 +146,7 @@ function row(s) {
   const reason = s.cancelReason || (s.status !== "on_time" && s.delayReason);
   const leavesIn = minutesUntil(s.expected || s.std);
   const soon = leavesIn < SOON_MIN;
-  const countdown = soon && s.status !== "cancelled"
+  const countdown = leavesIn < COUNTDOWN_MIN && s.status !== "cancelled"
     ? `<span class="leaves-in">${leavesIn <= 0 ? "due" : `in ${leavesIn} min`}</span>` : "";
   const cls = ["svc", s.fast && "fast", soon && "soon"].filter(Boolean).join(" ");
   return `<li class="${cls}">
