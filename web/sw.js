@@ -1,7 +1,7 @@
 // App shell: network first so updates show up immediately; the cached copy is
 // only a fallback for when the phone is offline. The API is never cached here
 // — the page keeps its own last board.
-const CACHE = "rail-table-v5";
+const CACHE = "rail-table-v6";
 const SHELL = ["./", "manifest.webmanifest", "icon.svg", "icon-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -20,7 +20,7 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== "GET" || url.origin !== location.origin || url.pathname.includes("/api/")) return;
   e.respondWith(
-    fetch(e.request)
+    fetch(e.request, { cache: "no-cache" })
       .then((resp) => {
         if (resp.ok) caches.open(CACHE).then((c) => c.put(e.request, resp.clone()));
         return resp;
