@@ -167,6 +167,15 @@ footer { flex: none; padding: 6px 0 10px; text-align: center; color: var(--muted
 footer { font-variant-numeric: tabular-nums; }
 footer.stale { color: var(--late); }
 
+/* Refresh cue: the list lifts in and the status line flashes green. */
+body.refreshed .services { animation: lift-in 450ms ease-out; }
+body.refreshed footer { animation: flash-ok 1200ms ease-out; }
+@keyframes lift-in { from { opacity: 0.3; transform: translateY(4px); } }
+@keyframes flash-ok { from { color: var(--ok); } }
+@media (prefers-reduced-motion: reduce) {
+  body.refreshed .services { animation: none; }
+}
+
 dialog {
   width: min(92vw, 420px);
   border: 0; border-radius: 14px;

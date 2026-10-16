@@ -56,6 +56,7 @@ async function load() {
     board.fetchedAt = Date.now();
     store.set("board", board);
     render(board);
+    flashRefreshed();
   } catch (e) {
     if (e.name === "AbortError") return;
     showNotice(`Couldn't load trains: ${e.message}`);
@@ -77,6 +78,13 @@ function locate() {
     (err) => { if (!coords) noLocation(err.code === err.PERMISSION_DENIED ? "Location access is off." : "Couldn't get your location."); },
     { enableHighAccuracy: false, maximumAge: 60_000, timeout: 15_000 },
   );
+}
+
+// Brief visual cue that fresh data has just arrived.
+function flashRefreshed() {
+  document.body.classList.remove("refreshed");
+  void document.body.offsetWidth; // restart the animation if it's mid-flight
+  document.body.classList.add("refreshed");
 }
 
 function noLocation(why) {
