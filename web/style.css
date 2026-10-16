@@ -168,8 +168,8 @@ footer { font-variant-numeric: tabular-nums; }
 footer.stale { color: var(--late); }
 
 /* Refresh cue: the list lifts in and the status line flashes green. */
-body.refreshed .services { animation: lift-in 450ms ease-out; }
-body.refreshed footer { animation: flash-ok 1200ms ease-out; }
+body.refreshed .services { animation: lift-in 900ms ease-out; }
+body.refreshed footer { animation: flash-ok 2400ms ease-out; }
 @keyframes lift-in { from { opacity: 0.3; transform: translateY(4px); } }
 @keyframes flash-ok { from { color: var(--ok); } }
 @media (prefers-reduced-motion: reduce) {
