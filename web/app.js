@@ -117,6 +117,7 @@ function render(board) {
     $("mode").textContent = "";
     list.innerHTML = "";
     messages.hidden = true;
+    $("fast-banner").hidden = true;
     showNotice("You're outside the UK 🌍", true);
     footer(board);
     return;
@@ -131,9 +132,31 @@ function render(board) {
   messages.innerHTML = board.messages.map((m) => `<li>${esc(m)}</li>`).join("");
   messages.hidden = !board.messages.length;
 
+  fastBanner(board.services);
   list.innerHTML = board.services.map(row).join("");
   if (!board.services.length) showNotice("No trains in the next two hours.");
   footer(board);
+}
+
+// "Next fast train in 7 min, then in 37 min" — the two soonest fast trains by
+// expected departure (the list itself is ordered by arrival).
+function fastBanner(services) {
+  const mins = services
+    .filter((s) => s.fast && s.status !== "cancelled")
+    .map((s) => minutesUntil(s.expected || s.std))
+    .filter((m) => m >= 0 && m !== Infinity)
+    .sort((a, b) => a - b);
+  const el = $("fast-banner");
+  el.hidden = !services.length;
+  const inMin = (m) => (m === 0 ? "now" : `in ${m} min`);
+  if (!mins.length) {
+    el.className = "fast-banner none";
+    el.textContent = "No fast trains in the next two hours";
+    return;
+  }
+  el.className = "fast-banner";
+  el.innerHTML = `<span class="bolt" aria-hidden="true">⚡</span> Next fast <b>${inMin(mins[0])}</b>`
+    + (mins.length > 1 ? `, then <b>${mins[1]} min</b>` : "");
 }
 
 function row(s) {
