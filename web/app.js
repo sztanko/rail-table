@@ -4,6 +4,8 @@ const REFRESH_MS = 60_000;
 // Reuse a recent fix so the board shows instantly; a fresh fix follows.
 const COORDS_MAX_AGE_MS = 15 * 60_000;
 const MOVED_KM = 0.3;
+// Trains leaving sooner than this are shown faded: too soon to catch.
+const SOON_MIN = 15;
 
 const $ = (id) => document.getElementById(id);
 const store = {
@@ -20,6 +22,9 @@ let inFlight = null;
 function esc(s) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 }
+
+// "London Charing Cross" -> "Charing Cross", but London Bridge stays whole.
+const short = (name) => (name || "").replace(/London (?!Bridge)/g, "");
 
 function km(a, b) {
   const r = Math.PI / 180;
@@ -108,7 +113,7 @@ function render(board) {
   }
 
   const { station, direction } = board;
-  $("route").textContent = direction === "to_london" ? "Orpington → London" : `${station.name.replace(/^London /, "")} → Orpington`;
+  $("route").textContent = direction === "to_london" ? "Orpington → London" : `${short(station.name)} → Orpington`;
   $("mode").textContent = pinnedStation()
     ? "Chosen station · tap to change"
     : `Nearest${station.distanceKm != null ? ` · ${station.distanceKm} km away` : ""} · tap to change`;
@@ -132,18 +137,21 @@ function row(s) {
   const meta = s.operator && s.operator !== "Southeastern" ? [`<span class="op">${esc(s.operator)}</span>`] : [];
   if (s.coaches) meta.push(`<span>${trainIcon()} ${s.coaches}</span>`);
   if (s.loading) meta.push(loadingBadge(s.loading));
+  if (s.fast) meta.push(`<span class="fast-tag">Fast</span>`);
 
   const arr = s.status === "cancelled" ? "" : s.arrivals.map((a) => {
     const label = s.arrivals.length > 1 || a.crs !== "ORP" ? `${a.crs} ` : "arr ";
     if (a.status === "cancelled") return `${label}<span class="late">cancelled</span>`;
     const late = a.delayMin > 0 || a.status === "delayed";
-    return `${label}<span class="${late ? "late" : ""}">${esc(a.expected || a.st)}</span>`;
+    const dur = a.durationMin != null ? ` <span class="dur">${a.durationMin}m</span>` : "";
+    return `${label}<span class="${late ? "late" : ""}">${esc(a.expected || a.st)}</span>${dur}`;
   }).join(" · ");
 
   const reason = s.cancelReason || (s.status !== "on_time" && s.delayReason);
-  return `<li class="svc">
+  const cls = ["svc", s.fast && "fast", minutesUntil(s.expected || s.std) < SOON_MIN && "soon"].filter(Boolean).join(" ");
+  return `<li class="${cls}">
     <div class="line">
-      <div class="dest"><span class="name">${esc(s.destination.replace(/London /g, ""))}</span>${s.platform ? `<span class="plat">${esc(s.platform)}</span>` : ""}</div>
+      <div class="dest"><span class="name">${esc(short(s.destination))}</span>${s.platform ? `<span class="plat">${esc(s.platform)}</span>` : ""}</div>
       ${dep}
     </div>
     <div class="line">
@@ -152,6 +160,15 @@ function row(s) {
     </div>
     ${reason ? `<div class="reason ${s.cancelReason ? "" : "delay"}">${esc(reason)}</div>` : ""}
   </li>`;
+}
+
+// Minutes from now until HH:MM (London time), negative if just gone.
+function minutesUntil(hhmm) {
+  if (!/^\d\d:\d\d$/.test(hhmm || "")) return Infinity;
+  const [h, m] = hhmm.split(":").map(Number);
+  const now = new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hour12: false });
+  const [nh, nm] = now.split(":").map(Number);
+  return ((h * 60 + m - (nh * 60 + nm) + 1440 + 720) % 1440) - 720;
 }
 
 function loadingBadge(l) {
@@ -205,8 +222,11 @@ $("picker-options").addEventListener("click", (e) => {
 
 $("station-btn").addEventListener("click", openPicker);
 $("refresh").addEventListener("click", refresh);
+$("messages").addEventListener("click", () => $("messages").classList.toggle("open"));
 document.addEventListener("visibilitychange", () => { if (!document.hidden) refresh(); });
 setInterval(() => { if (!document.hidden) load(); }, REFRESH_MS);
+// Re-fade rows as their departure gets close, between refreshes.
+setInterval(() => { const b = store.get("board"); if (b && !document.hidden) render(b); }, 20_000);
 
 const cachedBoard = store.get("board");
 if (cachedBoard) render(cachedBoard);

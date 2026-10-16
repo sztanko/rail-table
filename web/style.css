@@ -11,6 +11,7 @@
   --busy: #c0283b;
   --some: #b0731a;
   --quiet: #2c7a4b;
+  --fast: #4fc3f7;
 }
 
 * { box-sizing: border-box; }
@@ -73,6 +74,9 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
   background: #4a3a1c; color: #ffe2b0; font-size: 0.85rem;
 }
 .messages li + li { margin-top: 4px; }
+/* One line per message until tapped. */
+.messages { cursor: pointer; }
+.messages:not(.open) li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .services { list-style: none; margin: 0; padding: 0 16px; }
 
@@ -83,6 +87,16 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
   border-bottom: 1px solid var(--rule);
 }
 .svc:last-child { border-bottom: 0; }
+.svc.fast { box-shadow: inset 4px 0 var(--fast); margin-left: -16px; padding-left: 16px; }
+.svc.soon { opacity: 0.4; }
+
+.fast-tag {
+  padding: 1px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--fast);
+  color: var(--fast);
+  font-size: 0.78rem;
+}
 
 .line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
@@ -118,6 +132,7 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 
 .arr { text-align: right; color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .arr .late { color: var(--late); }
+.arr .dur { color: var(--text); opacity: 0.75; font-size: 0.8rem; }
 
 .reason { color: var(--bad); font-size: 0.82rem; }
 .reason.delay { color: var(--late); }

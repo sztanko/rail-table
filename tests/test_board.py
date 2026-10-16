@@ -109,3 +109,19 @@ def test_api(monkeypatch):
         assert client.get("/api/board", params={"station": "xyz"}).status_code == 400
         assert client.get("/api/board").status_code == 400
         assert client.get("/").status_code == 200
+
+
+async def test_fast_trains(darwin):
+    lbg = {s["id"]: s for s in (await build_board(darwin, station="LBG", now=NOW))["services"]}
+    assert lbg["chx1"]["fast"] is True  # non-stop to Orpington
+    assert lbg["cst1"]["fast"] is False  # stops at Hither Green, 24 min
+    orp = {s["id"]: s for s in (await build_board(darwin, station="ORP", now=NOW))["services"]}
+    assert orp["orp1"]["fast"] is True  # 17 min to London Bridge
+
+
+async def test_durations(darwin):
+    orp = {s["id"]: s for s in (await build_board(darwin, station="ORP", now=NOW))["services"]}
+    # Leaves 11:06 (8 late), reaches LBG 11:23 and CHX 11:30.
+    assert [(a["crs"], a["durationMin"]) for a in orp["orp1"]["arrivals"]] == [("LBG", 17), ("CHX", 24)]
+    chx = {s["id"]: s for s in (await build_board(darwin, station="CHX", now=NOW))["services"]}
+    assert chx["chx4"]["arrivals"][0]["durationMin"] is None  # cancelled

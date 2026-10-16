@@ -13,6 +13,9 @@ from .stations import LONDON_TARGETS, ORPINGTON, Station, all_stations, by_dista
 LONDON_TZ = ZoneInfo("Europe/London")
 # How many southern stations to try (nearest first) before giving up on them.
 MAX_SOUTHERN_TRIES = 4
+# A train is "fast" if it runs London Bridge <-> Orpington non-stop, or
+# is timetabled to do that leg in under this many minutes.
+FAST_LEG_MINUTES = 19
 # Every NRCC message ends with this; it only costs screen space.
 BOILERPLATE = re.compile(r"\s*(Latest|More) (travel )?information can be found[^.]*\.?", re.I)
 
@@ -74,7 +77,7 @@ def _merge_services(boards: list[dict], targets: tuple[str, ...], now: datetime)
             sid = svc.get("serviceID") or f"{svc.get('std')}-{len(seen)}"
             if sid in seen:
                 continue
-            parsed = _service(svc, targets)
+            parsed = _service(svc, targets, board.get("crs"))
             if parsed:
                 seen[sid] = parsed
     now_min = now.hour * 60 + now.minute
@@ -82,13 +85,17 @@ def _merge_services(boards: list[dict], targets: tuple[str, ...], now: datetime)
     return sorted(seen.values(), key=lambda s: (_minutes(s["std"]) - now_min + 720) % 1440)
 
 
-def _service(svc: dict, targets: tuple[str, ...]) -> dict | None:
+def _service(svc: dict, targets: tuple[str, ...], board_crs: str | None) -> dict | None:
     arrivals = _arrivals(svc, targets)
     if not arrivals:
         return None
     std = svc.get("std")
     cancelled = bool(svc.get("isCancelled")) or svc.get("etd") == "Cancelled"
     expected, delay, status = _expected(std, svc.get("etd"), cancelled)
+    departs = expected if status in ("on_time", "late") else std
+    for a in arrivals:
+        reaches = a["expected"] if a["status"] != "cancelled" else None
+        a["durationMin"] = (_minutes(reaches) - _minutes(departs)) % 1440 if reaches and departs else None
     formation = svc.get("formation") or {}
     coaches = svc.get("length") or len(formation.get("coaches") or []) or None
     return {
@@ -105,7 +112,26 @@ def _service(svc: dict, targets: tuple[str, ...]) -> dict | None:
         "coaches": coaches,
         "loading": _loading(formation),
         "arrivals": arrivals,
+        "fast": _is_fast(svc, board_crs),
     }
+
+
+def _is_fast(svc: dict, board_crs: str | None) -> bool:
+    """Non-stop, or under FAST_LEG_MINUTES, between London Bridge and Orpington.
+
+    Darwin lists only the stops a train makes, so the calling points between
+    the two are exactly its intermediate stops.
+    """
+    for portion in svc.get("subsequentCallingPoints") or []:
+        stops = [(board_crs, svc.get("std"))] + [
+            (cp.get("crs"), cp.get("st")) for cp in portion.get("callingPoint") or []
+        ]
+        crs_list = [crs for crs, _ in stops]
+        if "LBG" in crs_list and ORPINGTON in crs_list:
+            i, j = sorted((crs_list.index("LBG"), crs_list.index(ORPINGTON)))
+            leg = (_minutes(stops[j][1]) - _minutes(stops[i][1])) % 1440
+            return j - i == 1 or leg < FAST_LEG_MINUTES
+    return False
 
 
 def _arrivals(svc: dict, targets: tuple[str, ...]) -> list[dict]:

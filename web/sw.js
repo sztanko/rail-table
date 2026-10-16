@@ -1,6 +1,6 @@
 // App shell: served from cache instantly, refreshed in the background.
 // The API is never cached here — the page keeps its own last board.
-const CACHE = "rail-table-v1";
+const CACHE = "rail-table-v2";
 const SHELL = ["./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon.svg", "icon-192.png"];
 
 self.addEventListener("install", (e) => {
