@@ -132,6 +132,7 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 
 .arr { text-align: right; color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .arr .late { color: var(--late); }
+.st-icon { vertical-align: -3px; margin-right: 1px; }
 .arr .dur { color: var(--text); opacity: 0.75; font-size: 0.8rem; }
 
 .reason { color: var(--bad); font-size: 0.82rem; }

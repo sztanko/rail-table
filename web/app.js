@@ -140,7 +140,7 @@ function row(s) {
   if (s.fast) meta.push(`<span class="fast-tag">Fast</span>`);
 
   const arr = s.status === "cancelled" ? "" : s.arrivals.map((a) => {
-    const label = s.arrivals.length > 1 || a.crs !== "ORP" ? `${a.crs} ` : "arr ";
+    const label = `${STATION_ICONS[a.crs] || a.crs} `;
     if (a.status === "cancelled") return `${label}<span class="late">cancelled</span>`;
     const late = a.delayMin > 0 || a.status === "delayed";
     const dur = a.durationMin != null ? ` <span class="dur">${a.durationMin}m</span>` : "";
@@ -179,6 +179,22 @@ function loadingBadge(l) {
   const bg = /^#?[0-9a-f]{3,8}$/i.test(l.colour || "") ? `background:#${l.colour.replace("#", "")}` : "background:var(--rule)";
   return `<span class="load" style="${bg}">${esc(l.label)}</span>`;
 }
+
+// Arrival icons: London Bridge = a bridge, Charing Cross = Big Ben and the
+// London Eye, Orpington = home. Drawn in currentColor so they follow the text.
+const STATION_ICONS = {
+  LBG: `<svg class="st-icon" viewBox="0 0 24 16" width="24" height="16" fill="currentColor" role="img" aria-label="London Bridge"><title>London Bridge</title>
+    <path d="M0 4h24v1.5H0z"/>
+    <path d="M0 6.5h24V15h-1.5a3 5.5 0 0 0-6 0H15a3 5.5 0 0 0-6 0H7.5a3 5.5 0 0 0-6 0H0z"/></svg>`,
+  CHX: `<svg class="st-icon" viewBox="0 0 30 18" width="30" height="18" role="img" aria-label="Charing Cross"><title>Charing Cross</title>
+    <path fill="currentColor" fill-rule="evenodd" d="M3.2 18v-7.5H2.2V6h.6L5 0l2.2 6h.6v4.5H6.8V18zM5 6.7a1.55 1.55 0 1 0 0 3.1a1.55 1.55 0 1 0 0-3.1z"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
+      <circle cx="20" cy="8" r="6.5"/>
+      <path d="M20 1.5v13M13.5 8h13M15.4 3.4l9.2 9.2M24.6 3.4l-9.2 9.2M20 8l-3.5 9.5M20 8l3.5 9.5"/>
+    </g></svg>`,
+  ORP: `<svg class="st-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" role="img" aria-label="Orpington"><title>Orpington</title>
+    <path d="M8 1 .5 8H3v7h4v-4.5h2V15h4V8h2.5z"/></svg>`,
+};
 
 function trainIcon() {
   return `<svg width="13" height="15" viewBox="0 0 13 15" fill="currentColor" aria-label="coaches" style="vertical-align:-2px"><path d="M2.5 0h8A2.5 2.5 0 0 1 13 2.5v8a2.5 2.5 0 0 1-2 2.45L12.5 15h-2l-1.5-2H4l-1.5 2h-2L2 12.95A2.5 2.5 0 0 1 0 10.5v-8A2.5 2.5 0 0 1 2.5 0zM2 3v3.5h9V3zm1.5 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm6 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>`;
