@@ -85,9 +85,10 @@ async def test_orpington_goes_to_london(darwin):
     board = await build_board(darwin, 51.375, 0.098, now=NOW)
     assert board["station"]["crs"] == "ORP"
     assert board["direction"] == "to_london"
-    # orp1 appears on both the LBG and CHX boards but is listed once.
-    assert [s["id"] for s in board["services"]] == ["orp1", "orp2", "orp3"]
-    assert [a["crs"] for a in board["services"][0]["arrivals"]] == ["LBG", "CHX"]
+    # orp1 appears on both the LBG and CHX boards but is listed once; it is
+    # timetabled 10:58 but expected 11:06, so the on-time 11:04 goes first.
+    assert [s["id"] for s in board["services"]] == ["orp2", "orp1", "orp3"]
+    assert [a["crs"] for a in board["services"][1]["arrivals"]] == ["LBG", "CHX"]
     assert board["messages"] == ["Disruption between Sevenoaks & Tonbridge."]
 
 
@@ -136,3 +137,10 @@ def test_index_versions_assets(monkeypatch):
         assert "{{v}}" not in resp.text and "app.js?v=" in resp.text
         assert client.get("/app.js").headers["cache-control"] == "no-cache"
         assert client.get("/api/board", params={"station": "ORP"}).headers["cache-control"] == "no-store"
+
+
+async def test_ordered_by_expected_departure(darwin):
+    # chx3 is timetabled 11:07 but expected 11:10; chx1 10:50 expected 10:58.
+    board = await build_board(darwin, station="CHX", now=NOW)
+    order = [(s["id"], s["expected"]) for s in board["services"]]
+    assert order[:3] == [("chx1", "10:58"), ("chx3", "11:10"), ("chx2", "11:15")]

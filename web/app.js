@@ -139,13 +139,7 @@ function row(s) {
   if (s.loading) meta.push(loadingBadge(s.loading));
   if (s.fast) meta.push(`<span class="fast-tag">Fast</span>`);
 
-  const arr = s.status === "cancelled" ? "" : s.arrivals.map((a) => {
-    const label = `${STATION_ICONS[a.crs] || a.crs} `;
-    if (a.status === "cancelled") return `${label}<span class="late">cancelled</span>`;
-    const late = a.delayMin > 0 || a.status === "delayed";
-    const dur = a.durationMin != null ? ` <span class="dur">${a.durationMin}m</span>` : "";
-    return `${label}<span class="${late ? "late" : ""}">${esc(a.expected || a.st)}</span>${dur}`;
-  }).join(" · ");
+  const trip = s.status === "cancelled" ? "" : tripLine(s.arrivals);
 
   const reason = s.cancelReason || (s.status !== "on_time" && s.delayReason);
   const cls = ["svc", s.fast && "fast", minutesUntil(s.expected || s.std) < SOON_MIN && "soon"].filter(Boolean).join(" ");
@@ -156,11 +150,30 @@ function row(s) {
     </div>
     <div class="line">
       <div class="meta">${meta.join(" ")}</div>
-      <div class="arr">${arr}</div>
+      ${trip}
     </div>
     ${reason ? `<div class="reason ${s.cancelReason ? "" : "delay"}">${esc(reason)}</div>` : ""}
   </li>`;
 }
+
+// The journey as a little route line: each leg is an arrow labelled with its
+// own duration, ending at the station icon with the arrival time above it.
+//   ─15m─▶ [11:56 / bridge] ─9m─▶ [12:05 / Big Ben]
+function tripLine(arrivals) {
+  let prev = 0;
+  const parts = arrivals.map((a) => {
+    const leg = a.durationMin != null ? a.durationMin - prev : null;
+    if (a.durationMin != null) prev = a.durationMin;
+    const cancelled = a.status === "cancelled";
+    const late = a.delayMin > 0 || a.status === "delayed";
+    const time = cancelled ? "✕" : esc(a.expected || a.st);
+    return `<span class="leg"><span class="mins">${leg != null && !cancelled ? `${leg}m` : ""}</span>${ARROW}</span>
+      <span class="stop${cancelled ? " bad" : late ? " late" : ""}"><span class="t">${time}</span>${STATION_ICONS[a.crs] || esc(a.crs)}</span>`;
+  });
+  return `<div class="trip">${parts.join("")}</div>`;
+}
+
+const ARROW = `<svg class="arrow" viewBox="0 0 34 8" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 4h31M28.5 1.2 32 4l-3.5 2.8"/></svg>`;
 
 // Minutes from now until HH:MM (London time), negative if just gone.
 function minutesUntil(hhmm) {
@@ -180,20 +193,25 @@ function loadingBadge(l) {
   return `<span class="load" style="${bg}">${esc(l.label)}</span>`;
 }
 
-// Arrival icons: London Bridge = a bridge, Charing Cross = Big Ben and the
+// Arrival icons: London Bridge = the bridge and the Shard, Charing Cross = Big Ben and the
 // London Eye, Orpington = home. Drawn in currentColor so they follow the text.
 const STATION_ICONS = {
-  LBG: `<svg class="st-icon" viewBox="0 0 24 16" width="24" height="16" fill="currentColor" role="img" aria-label="London Bridge"><title>London Bridge</title>
-    <path d="M0 4h24v1.5H0z"/>
-    <path d="M0 6.5h24V15h-1.5a3 5.5 0 0 0-6 0H15a3 5.5 0 0 0-6 0H7.5a3 5.5 0 0 0-6 0H0z"/></svg>`,
-  CHX: `<svg class="st-icon" viewBox="0 0 30 18" width="30" height="18" role="img" aria-label="Charing Cross"><title>Charing Cross</title>
-    <path fill="currentColor" fill-rule="evenodd" d="M3.2 18v-7.5H2.2V6h.6L5 0l2.2 6h.6v4.5H6.8V18zM5 6.7a1.55 1.55 0 1 0 0 3.1a1.55 1.55 0 1 0 0-3.1z"/>
-    <g fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round">
-      <circle cx="20" cy="8" r="6.5"/>
-      <path d="M20 1.5v13M13.5 8h13M15.4 3.4l9.2 9.2M24.6 3.4l-9.2 9.2M20 8l-3.5 9.5M20 8l3.5 9.5"/>
+  LBG: `<svg class="st-icon" viewBox="0 0 29 18" width="29" height="18" fill="none" stroke="currentColor" stroke-linecap="round" role="img" aria-label="London Bridge"><title>London Bridge</title>
+    <path d="M1 13.5h19M4 13.5v3.5M17 13.5v3.5" stroke-width="1.4"/>
+    <path d="M2.5 13.5Q10.5 1.5 18.5 13.5" stroke-width="1.4"/>
+    <path d="M6 9.4v4.1M8.25 8v5.5M10.5 7.5v6M12.75 8v5.5M15 9.4v4.1" stroke-width=".8"/>
+    <path fill="currentColor" stroke="none" d="M22 18 24.1 1.6l.5 1.5L25.3 0 28 18z"/></svg>`,
+  CHX: `<svg class="st-icon" viewBox="0 0 21 18" width="21" height="18" role="img" aria-label="Charing Cross"><title>Charing Cross</title>
+    <path fill="currentColor" fill-rule="evenodd" d="M2.2 18v-7.5H1.2V6h.6L4 0l2.2 6h.6v4.5H5.8V18zM4 6.7a1.55 1.55 0 1 0 0 3.1a1.55 1.55 0 1 0 0-3.1z"/>
+    <g fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
+      <circle cx="14" cy="7.5" r="6"/>
+      <path d="M14 1.5v12M8 7.5h12M9.8 3.3l8.4 8.4M18.2 3.3l-8.4 8.4" stroke-width=".8"/>
+      <path d="M14 7.5l-3 10M14 7.5l3 10"/>
     </g></svg>`,
-  ORP: `<svg class="st-icon" viewBox="0 0 16 16" width="16" height="16" fill="currentColor" role="img" aria-label="Orpington"><title>Orpington</title>
-    <path d="M8 1 .5 8H3v7h4v-4.5h2V15h4V8h2.5z"/></svg>`,
+  ORP: `<svg class="st-icon" viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Orpington"><title>Orpington</title>
+    <path d="M1.5 7.5 8 1.8l6.5 5.7"/>
+    <path d="M3.5 6v8.2h9V6"/>
+    <path d="M6.5 14.2v-4h3v4"/></svg>`,
 };
 
 function trainIcon() {

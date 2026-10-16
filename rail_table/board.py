@@ -81,8 +81,13 @@ def _merge_services(boards: list[dict], targets: tuple[str, ...], now: datetime)
             if parsed:
                 seen[sid] = parsed
     now_min = now.hour * 60 + now.minute
-    # Trains a little past their scheduled time (i.e. running late) sort first.
-    return sorted(seen.values(), key=lambda s: (_minutes(s["std"]) - now_min + 720) % 1440)
+
+    # Order by when the train will actually leave, not its timetable slot.
+    def leaves(s: dict) -> int:
+        when = s["expected"] if s["status"] in ("on_time", "late") else s["std"]
+        return (_minutes(when) - now_min + 720) % 1440
+
+    return sorted(seen.values(), key=leaves)
 
 
 def _service(svc: dict, targets: tuple[str, ...], board_crs: str | None) -> dict | None:
