@@ -20,7 +20,7 @@ html, body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.3 system-ui, -apple-system, "Roboto", sans-serif;
+  font: 14px/1.3 system-ui, -apple-system, "Roboto", sans-serif;
 }
 
 body {
@@ -36,8 +36,8 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 10px 10px 0;
-  padding: 12px 12px 12px 16px;
+  margin: 6px 6px 0;
+  padding: 8px 10px 8px 14px;
   background: var(--panel);
   border-radius: 14px 14px 0 0;
 }
@@ -54,23 +54,23 @@ header {
 .mode { display: block; font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
 
 .icon-btn {
-  width: 40px; height: 40px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   border: 2px solid var(--rule);
   background: var(--bg);
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   cursor: pointer;
 }
 .icon-btn.spin { animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-main { flex: 1; margin: 0 10px; background: var(--row); }
+main { flex: 1; margin: 0 6px; background: var(--row); }
 
 .notice { margin: 0; padding: 24px 16px; text-align: center; color: var(--muted); }
 .notice.big { font-size: 1.3rem; color: var(--text); padding: 48px 16px; }
 
 .messages {
-  list-style: none; margin: 0; padding: 8px 16px;
+  list-style: none; margin: 0; padding: 6px 14px;
   background: #4a3a1c; color: #ffe2b0; font-size: 0.85rem;
 }
 .messages li + li { margin-top: 4px; }
@@ -78,27 +78,28 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 .messages { cursor: pointer; }
 .messages:not(.open) li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.services { list-style: none; margin: 0; padding: 0 16px; }
+.services { list-style: none; margin: 0; padding: 0 14px; }
 
 .svc {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 4px;
-  padding: 12px 0;
+  gap: 2px;
+  padding: 7px 0;
   border-bottom: 1px solid var(--rule);
 }
 .svc:last-child { border-bottom: 0; }
-.svc.fast { box-shadow: inset 4px 0 var(--fast); margin-left: -16px; padding-left: 16px; }
-/* Too soon to catch: faded, except the countdown, which stays readable. */
+.svc.fast { box-shadow: inset 4px 0 var(--fast); margin-left: -14px; padding-left: 14px; }
+/* Too soon to catch: faded; the countdown a little less so, to stay legible. */
 .svc.soon :is(.name, .plat, .dep, .meta, .trip, .reason) { opacity: 0.4; }
 .svc.fast.soon { box-shadow: inset 4px 0 rgb(79 195 247 / 0.4); }
 .leaves-in {
   flex: none;
   padding: 1px 8px;
   border-radius: 10px;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 0.8rem;
+  background: rgb(22 26 61 / 0.6);
+  color: var(--muted);
+  opacity: 0.75;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -113,23 +114,23 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 
 .line { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; }
 
-.dest { flex: 1; display: flex; align-items: center; gap: 8px; font-size: 1.15rem; min-width: 0; }
+.dest { flex: 1; display: flex; align-items: center; gap: 6px; font-size: 1.1rem; min-width: 0; }
 .dest .name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .plat {
   flex: none;
-  min-width: 28px; height: 28px; padding: 0 6px;
+  min-width: 22px; height: 22px; padding: 0 5px;
   display: inline-grid; place-items: center;
-  border-radius: 14px;
+  border-radius: 11px;
   background: var(--rule);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
-.dep { text-align: right; font-size: 1.15rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.dep { text-align: right; font-size: 1.1rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .dep.late { color: var(--late); }
 .dep.bad { color: var(--bad); }
 .dep s { color: var(--muted); font-size: 0.9rem; margin-right: 4px; }
 
-.meta { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.9rem; min-width: 0; }
+.meta { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 0.85rem; min-width: 0; }
 .meta > * { white-space: nowrap; }
 .meta .op { font-style: italic; overflow: hidden; text-overflow: ellipsis; }
 .load {
@@ -144,19 +145,20 @@ main { flex: 1; margin: 0 10px; background: var(--row); }
 .load.low { background: var(--quiet); }
 
 .trip { display: flex; align-items: flex-end; flex: 0 1 auto; min-width: 0; color: var(--muted); }
-.leg { display: flex; flex-direction: column; align-items: center; width: 76px; min-width: 40px; flex-shrink: 1; padding-bottom: 6px; }
-.leg .mins { font-size: 0.75rem; line-height: 1; margin-bottom: 7px; color: var(--text); opacity: 0.8; font-variant-numeric: tabular-nums; }
+/* Arrows sit at the height of the bridge deck (4.5px up on an 18px icon). */
+.leg { display: flex; flex-direction: column; align-items: center; width: 76px; min-width: 40px; flex-shrink: 1; margin: 0 5px; padding-bottom: 1px; }
+.leg .mins { font-size: 0.7rem; line-height: 1; margin-bottom: 2px; color: var(--text); opacity: 0.8; font-variant-numeric: tabular-nums; }
 .leg .arrow { width: 100%; height: 8px; opacity: 0.7; }
 .stop { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 34px; }
-.stop .t { font-size: 0.85rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stop .t { font-size: 0.75rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
 .stop.late .t { color: var(--late); }
 .stop.bad .t { color: var(--bad); }
-.st-icon { display: block; height: 20px; width: auto; }
+.st-icon { display: block; height: 18px; width: auto; }
 
-.reason { color: var(--bad); font-size: 0.82rem; }
+.reason { color: var(--bad); font-size: 0.78rem; }
 .reason.delay { color: var(--late); }
 
-footer { padding: 8px 0 12px; text-align: center; color: var(--muted); font-size: 0.85rem; }
+footer { padding: 6px 0 10px; text-align: center; color: var(--muted); font-size: 0.85rem; }
 footer { font-variant-numeric: tabular-nums; }
 footer.stale { color: var(--late); }
 
