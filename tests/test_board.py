@@ -6,7 +6,6 @@ from fastapi.testclient import TestClient
 
 from rail_table.board import LONDON_TZ, _expected, build_board
 from rail_table.darwin import Darwin
-from rail_table.geo import in_uk
 
 FIXTURES = Path(__file__).parent / "fixtures"
 NOW = datetime(2026, 10, 15, 11, 0, tzinfo=LONDON_TZ)
@@ -17,22 +16,6 @@ async def darwin():
     d = Darwin(api_key=None, fixtures_dir=FIXTURES)
     yield d
     await d.aclose()
-
-
-@pytest.mark.parametrize(
-    "lat, lon, expected",
-    [
-        (51.508, -0.128, True),  # Trafalgar Square
-        (55.953, -3.188, True),  # Edinburgh
-        (54.597, -5.930, True),  # Belfast
-        (51.389, 1.386, True),  # Margate seafront
-        (48.857, 2.352, False),  # Paris
-        (53.349, -6.260, False),  # Dublin
-        (50.951, 1.858, False),  # Calais
-    ],
-)
-def test_in_uk(lat, lon, expected):
-    assert in_uk(lat, lon) is expected
 
 
 @pytest.mark.parametrize(
@@ -92,8 +75,18 @@ async def test_orpington_goes_to_london(darwin):
     assert board["messages"] == ["Disruption between Sevenoaks & Tonbridge."]
 
 
-async def test_outside_uk(darwin):
-    assert await build_board(darwin, 48.857, 2.352, now=NOW) == {"status": "outside_uk"}
+@pytest.mark.parametrize(
+    "lat, lon, outside",
+    [
+        (48.857, 2.352, True),  # Paris
+        (52.480, -1.903, True),  # Birmingham
+        (50.822, -0.137, False),  # Brighton, ~70 km
+        (50.858, 0.577, False),  # Hastings, end of the line
+    ],
+)
+async def test_outside_london(darwin, lat, lon, outside):
+    board = await build_board(darwin, lat, lon, now=NOW)
+    assert (board["status"] == "outside_london") is outside
 
 
 async def test_station_override(darwin):

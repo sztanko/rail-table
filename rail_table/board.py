@@ -7,12 +7,14 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 from .darwin import Darwin
-from .geo import in_uk
+from .geo import distance_km
 from .stations import LONDON_TARGETS, ORPINGTON, Station, all_stations, by_distance
 
 LONDON_TZ = ZoneInfo("Europe/London")
 # How many southern stations to try (nearest first) before giving up on them.
 MAX_SOUTHERN_TRIES = 4
+# Further than this from Orpington and there's no useful board to show.
+OUTSIDE_LONDON_KM = 100
 # A train is "fast" if it runs London Bridge <-> Orpington non-stop, or
 # is timetabled to do that leg in under this many minutes.
 FAST_LEG_MINUTES = 19
@@ -34,8 +36,10 @@ async def build_board(
         chosen = all_stations()[station]
         boards = await _boards_for(darwin, chosen)
     else:
-        if not in_uk(lat, lon):
-            return {"status": "outside_uk"}
+        orp = all_stations()[ORPINGTON]
+        away = distance_km(lat, lon, orp.lat, orp.lon)
+        if away >= OUTSIDE_LONDON_KM:
+            return {"status": "outside_london", "distanceKm": round(away)}
         chosen, distance, boards = await _nearest_with_service(darwin, lat, lon)
 
     targets = LONDON_TARGETS if chosen.crs == ORPINGTON else (ORPINGTON,)

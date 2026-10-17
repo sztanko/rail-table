@@ -16,7 +16,11 @@ const store = {
 };
 
 // ?station=CRS pins a station for this page only (handy as a bookmark).
-const urlStation = new URLSearchParams(location.search).get("station");
+const params = new URLSearchParams(location.search);
+const urlStation = params.get("station");
+// ?lat=..&lon=.. stands in for the phone's location (for testing).
+const urlCoords = params.has("lat") && params.has("lon")
+  ? { lat: Number(params.get("lat")), lon: Number(params.get("lon")), t: Date.now() } : null;
 
 let coords = null;      // {lat, lon, t} used for the board on screen
 let inFlight = null;
@@ -94,7 +98,7 @@ function noLocation(why) {
 }
 
 function refresh() {
-  if (!pinnedStation()) locate();
+  if (!pinnedStation() && !urlCoords) locate();
   load();
 }
 
@@ -112,13 +116,16 @@ function render(board) {
   const list = $("services");
   const messages = $("messages");
 
-  if (board.status === "outside_uk") {
+  if (board.status === "outside_london") {
     $("route").textContent = "Train Departure Board";
-    $("mode").textContent = "";
+    $("mode").textContent = pinnedStation() ? "" : "Tap to pick a station";
     list.innerHTML = "";
     messages.hidden = true;
     $("fast-banner").hidden = true;
-    showNotice("You're outside the UK 🌍", true);
+    const n = $("notice");
+    n.className = "notice big away";
+    n.innerHTML = `${PALM_TREE}<div>You're outside London</div><div class="away-km">${board.distanceKm} km from Orpington</div>`;
+    n.hidden = false;
     footer(board);
     return;
   }
@@ -158,6 +165,24 @@ function fastBanner(services) {
   el.innerHTML = `<span class="bolt" aria-hidden="true">⚡</span> Next fast <b>${inMin(mins[0])}</b>`
     + (mins.length > 1 ? `, then <b>${mins[1]} min</b>` : "");
 }
+
+// Shown when you're 100 km or more from Orpington: sun, palm, a bit of beach.
+const PALM_TREE = `<svg class="palm" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+  <circle cx="28" cy="26" r="11" fill="#ffcf5a" opacity=".9"/>
+  <path d="M8 112c10-4 20-4 30 0s20 4 30 0 20-4 30 0 14 3 14 3" fill="none" stroke="#4fc3f7" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+  <ellipse cx="62" cy="106" rx="34" ry="6" fill="#e8c27a" opacity=".85"/>
+  <path d="M57 106c-3-22-3-42 6-62l5 1c-7 20-6 40-3 61z" fill="#b07a4a"/>
+  <path d="M58 92h7M57.5 80h7M58 68h7M60 56h6" stroke="#8a5a32" stroke-width="1.5" stroke-linecap="round"/>
+  <g fill="#5fbf77">
+    <path d="M65 44C52 30 34 31 22 44c14-6 29-4 43 0z"/>
+    <path d="M65 44c13-16 32-15 43-3-14-4-29-2-43 3z"/>
+    <path d="M65 44C58 26 46 19 34 21c12 6 22 13 31 23z"/>
+    <path d="M65 44c5-20 19-28 31-25-12 4-23 12-31 25z"/>
+    <path d="M65 44C51 46 41 56 39 68c7-10 15-18 26-24z"/>
+    <path d="M65 44c14 4 22 14 22 26-6-10-13-18-22-26z"/>
+  </g>
+  <circle cx="62" cy="48" r="3" fill="#7a5230"/><circle cx="67.5" cy="47.5" r="3" fill="#7a5230"/>
+</svg>`;
 
 function row(s) {
   let dep;
@@ -319,7 +344,8 @@ setInterval(() => { const b = store.get("board"); if (b && !document.hidden) ren
 const cachedBoard = store.get("board");
 if (cachedBoard) render(cachedBoard);
 const cachedCoords = store.get("coords");
-if (cachedCoords && Date.now() - cachedCoords.t < COORDS_MAX_AGE_MS) coords = cachedCoords;
+if (urlCoords) coords = urlCoords;
+else if (cachedCoords && Date.now() - cachedCoords.t < COORDS_MAX_AGE_MS) coords = cachedCoords;
 refresh();
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");

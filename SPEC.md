@@ -7,7 +7,8 @@ station you are nearest to.
 ## Behaviour
 
 1. The page asks the browser for the current location.
-2. **Outside the UK** → show "You're outside the UK" and nothing else.
+2. **Outside London** — 100 km or more from Orpington → a palm tree and
+   "You're outside London" (with the distance), no trains.
 3. Otherwise pick the **nearest candidate station** (straight-line distance):
    - London: **Charing Cross (CHX)**, **Waterloo East (WAE)**, **London Bridge (LBG)**
    - **Orpington (ORP)**
@@ -44,8 +45,6 @@ pull/tap to refresh. Dark theme, compact, readable at a glance (see the
 - **National Rail Darwin**, via the free **Rail Data Marketplace** "Live
   Departure Board" product (LDBWS REST/JSON, `x-apikey` header):
   `GET https://api1.raildata.org.uk/1010-live-departure-board-dep1_2/LDBWS/api/20220120/GetDepBoardWithDetails/{crs}?filterCrs=…&filterType=to&timeWindow=120`
-- UK outline: Natural Earth (public domain), simplified, for the
-  in/out-of-UK check.
 - Station coordinates: static list in the repo.
 
 Free sources only.
@@ -56,7 +55,7 @@ The data needs a secret API key and isn't callable cross-origin from a
 browser, so there is a small backend:
 
 - **Backend**: Python (FastAPI) — `GET /api/board?lat=&lon=[&station=]`
-  does the UK check, station choice, Darwin calls (cached ~30 s), filtering,
+  does the outside-London check, station choice, Darwin calls (cached ~30 s), filtering,
   and returns a compact JSON. Also serves the frontend.
 - **Frontend**: static HTML/CSS/vanilla JS, installable as a PWA (home-screen
   icon on the Pixel 5, opens straight to the list).

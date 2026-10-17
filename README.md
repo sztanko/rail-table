@@ -20,7 +20,8 @@ set -a; . ./.env; set +a
 ```
 
 No key? `RAIL_FIXTURES_DIR=tests/fixtures` serves canned boards. Add
-`?station=CHX` (any CRS from `/api/stations`) to the URL to skip geolocation.
+`?station=CHX` (any CRS from `/api/stations`) or `?lat=51.5&lon=-0.12` to the
+URL to skip geolocation.
 
 ```sh
 .venv/bin/pytest
@@ -48,4 +49,3 @@ Updates: pull in `~/workspace/rail-table`, then re-run step 1.
   needs a key).
 - Station coordinates: [davwheat/uk-railway-stations](https://github.com/davwheat/uk-railway-stations)
   (ODbL).
-- UK outline: [Natural Earth](https://www.naturalearthdata.com) 1:50m (public domain).
