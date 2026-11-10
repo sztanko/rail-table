@@ -34,13 +34,17 @@ chosen station, direction, and services. `GET /api/stations` — candidates.
 
 ## Deploy (this server)
 
-1. `bash deploy/install-service.sh` — systemd user service on 127.0.0.1:8787
-   (reads `.env`).
-2. `cloudflared tunnel route dns infinity rail.geocube.work` — once.
-3. `sudo bash deploy/sudo-setup-rail-hosting.sh` — Caddy vhost + tunnel
-   ingress, once.
+Since 2026-11-07 the site runs as the sandboxed system user `site-rail` from
+`/srv/sites/rail` (system unit `rail-table.service`; env in
+`/srv/sites/rail/env`). The units are generated outside this repo by
+`~/workspace/site-hardening`. To ship what's on `main`:
 
-Updates: pull in `~/workspace/rail-table`, then re-run step 1.
+```sh
+sudo systemctl start rail-table-deploy
+```
+
+`deploy/` holds the original user-service and Caddy/tunnel setup, kept for
+reference only.
 
 ## Data
 
